@@ -1,0 +1,42 @@
+<section class="page">
+  <div class="card detail-card">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Student Details</p>
+        <h2>{{ student.name }}</h2>
+      </div>
+      <span class="status" [ngClass]="student.status.toLowerCase()">{{ student.status }}</span>
+    </div>
+
+    <div class="grid">
+      <div class="info-box">
+        <label>Grade</label>
+        <p>{{ student.grade }}</p>
+      </div>
+      <div class="info-box">
+        <label>Roll Number</label>
+        <p>{{ student.rollNumber }}</p>
+      </div>
+      <div class="info-box">
+        <label>Email</label>
+        <p>{{ student.email }}</p>
+      </div>
+      <div class="info-box">
+        <label>Phone</label>
+        <p>{{ student.phone }}</p>
+      </div>
+      <div class="info-box">
+        <label>Guardian</label>
+        <p>{{ student.guardian }}</p>
+      </div>
+      <div class="info-box">
+        <label>Address</label>
+        <p>{{ student.address }}</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/home" class="secondary-btn">Back to Home</a>
+    </div>
+  </div>
+</section>

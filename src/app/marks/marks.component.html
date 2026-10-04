@@ -1,0 +1,41 @@
+<section class="page">
+  <div class="card">
+    <h2>Marks</h2>
+
+    <div class="stats">
+      <div class="stat-box">
+        <h3>Average</h3>
+        <strong>89.8%</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Top Score</h3>
+        <strong>95%</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Pass Rate</h3>
+        <strong>96%</strong>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Exam</th>
+            <th>Score</th>
+            <th>Teacher</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of records">
+            <td>{{ record.subject }}</td>
+            <td>{{ record.exam }}</td>
+            <td>{{ record.score }}</td>
+            <td>{{ record.teacher }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
