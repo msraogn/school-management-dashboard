@@ -1,0 +1,16 @@
+<section class="page">
+  <div class="card">
+    <h2>Login</h2>
+    <form (ngSubmit)="onLogin()">
+      <label>
+        Email
+        <input type="email" name="email" [(ngModel)]="email" placeholder="name@school.com" required />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" [(ngModel)]="password" placeholder="Enter password" required />
+      </label>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+<section class="page">
+  <div class="card">
+    <h2>Fees</h2>
+
+    <div class="stats">
+      <div class="stat-box">
+        <h3>Total Collected</h3>
+        <strong>$12,400</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Pending</h3>
+        <strong>$2,150</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Overdue</h3>
+        <strong>2 Students</strong>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Amount Due</th>
+            <th>Status</th>
+            <th>Due Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of feeRecords">
+            <td>{{ item.student }}</td>
+            <td>{{ item.due }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

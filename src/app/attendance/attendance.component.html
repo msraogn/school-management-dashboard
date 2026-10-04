@@ -1,0 +1,41 @@
+<section class="page">
+  <div class="card">
+    <h2>Attendance</h2>
+
+    <div class="stats">
+      <div class="stat-box">
+        <h3>Present Students</h3>
+        <strong>78%</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Absent Students</h3>
+        <strong>12%</strong>
+      </div>
+      <div class="stat-box">
+        <h3>Late Arrivals</h3>
+        <strong>10%</strong>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Present</th>
+            <th>Total</th>
+            <th>Attendance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of attendance">
+            <td>{{ student.student }}</td>
+            <td>{{ student.present }}</td>
+            <td>{{ student.total }}</td>
+            <td>{{ student.rate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
