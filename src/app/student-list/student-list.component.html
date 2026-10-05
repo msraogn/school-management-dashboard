@@ -1,33 +1,124 @@
 <section class="page">
-  <div class="card">
-    <div class="page-header">
-      <h2>Student List</h2>
-      <div class="badge">Home</div>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">SCHOOL OVERVIEW</p>
+      <h1>Student directory</h1>
+      <p class="page-description">Manage student records and attendance status.</p>
     </div>
+    <button class="primary-button" type="button" (click)="openAddForm()"><span aria-hidden="true">+</span> Add Student</button>
+  </header>
+
+  <section class="summary-grid" aria-label="Attendance summary">
+    <article class="summary-item total-summary">
+      <span class="summary-label">Total students</span>
+      <strong>{{ students.length }}</strong>
+      <span class="summary-caption">Enrolled records</span>
+    </article>
+    <article class="summary-item present-summary">
+      <span class="summary-label">Present</span>
+      <strong>{{ countByStatus('Present') }}</strong>
+      <span class="summary-caption">On campus today</span>
+    </article>
+    <article class="summary-item late-summary">
+      <span class="summary-label">Late</span>
+      <strong>{{ countByStatus('Late') }}</strong>
+      <span class="summary-caption">Arrived after start</span>
+    </article>
+    <article class="summary-item absent-summary">
+      <span class="summary-label">Absent</span>
+      <strong>{{ countByStatus('Absent') }}</strong>
+      <span class="summary-caption">Not checked in</span>
+    </article>
+  </section>
+
+  <section class="directory" aria-label="Student records">
+    <div class="directory-heading">
+      <div>
+        <h2>All students</h2>
+        <p>{{ filteredStudents.length }} records</p>
+      </div>
+      <div class="filters">
+        <label class="search-field">
+          <span class="visually-hidden">Search students</span>
+          <span aria-hidden="true" class="search-icon">⌕</span>
+          <input type="search" name="search" [(ngModel)]="searchTerm" (ngModelChange)="changeFilters()" placeholder="Search name, grade or roll no." />
+        </label>
+        <label class="status-filter">
+          <span class="visually-hidden">Filter by status</span>
+          <select name="statusFilter" [(ngModel)]="statusFilter" (ngModelChange)="changeFilters()">
+            <option value="All">All statuses</option>
+            <option value="Present">Present</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <form class="student-form" *ngIf="editorMode" (ngSubmit)="saveStudent()">
+      <div class="form-heading">
+        <h3>{{ editorMode === 'add' ? 'Add student' : 'Edit student' }}</h3>
+        <button class="icon-button close-button" type="button" aria-label="Close form" (click)="closeForm()">×</button>
+      </div>
+      <div class="form-grid">
+        <label>Student name<input name="name" [(ngModel)]="studentDraft.name" required /></label>
+        <label>Grade<input name="grade" [(ngModel)]="studentDraft.grade" placeholder="Grade 8-A" required /></label>
+        <label>Roll number<input name="rollNumber" [(ngModel)]="studentDraft.rollNumber" required /></label>
+        <label>Attendance status
+          <select name="studentStatus" [(ngModel)]="studentDraft.status">
+            <option value="Present">Present</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </label>
+        <label>Guardian<input name="guardian" [(ngModel)]="studentDraft.guardian" /></label>
+        <label>Phone<input name="phone" [(ngModel)]="studentDraft.phone" type="tel" /></label>
+        <label class="address-field">Address<input name="address" [(ngModel)]="studentDraft.address" /></label>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="secondary-button" (click)="closeForm()">Cancel</button>
+        <button type="submit" class="primary-button">{{ editorMode === 'add' ? 'Add Student' : 'Save Changes' }}</button>
+      </div>
+    </form>
 
     <div class="table-wrapper">
       <table>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Grade</th>
-            <th>Roll No.</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
+          <tr><th>Student</th><th>Grade</th><th>Roll No.</th><th>Status</th><th class="actions-heading">Actions</th></tr>
         </thead>
         <tbody>
-          <tr *ngFor="let student of students">
-            <td>{{ student.name }}</td>
-            <td>{{ student.grade }}</td>
-            <td>{{ student.rollNumber }}</td>
-            <td>{{ student.status }}</td>
-            <td>
-              <a [routerLink]="['/students', student.id]" class="details-link">View Details</a>
+          <tr *ngFor="let student of pagedStudents">
+            <td data-label="Student"><span class="student-name">{{ student.name }}</span></td>
+            <td data-label="Grade">{{ student.grade }}</td>
+            <td data-label="Roll No.">{{ student.rollNumber }}</td>
+            <td data-label="Status"><span class="status-badge" [ngClass]="statusClass(student.status)">{{ student.status }}</span></td>
+            <td data-label="Actions" class="row-actions">
+              <a [routerLink]="['/students', student.id]" class="details-link">Details</a>
+              <button class="row-action" type="button" (click)="openEditForm(student)">Edit</button>
+              <button class="row-action delete-action" type="button" (click)="deleteStudent(student)">Delete</button>
             </td>
+          </tr>
+          <tr *ngIf="pagedStudents.length === 0">
+            <td class="empty-state" colspan="5">No students match these filters.</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
+
+    <footer class="pagination">
+      <span class="range-label">Showing {{ firstVisibleIndex }}–{{ lastVisibleIndex }} of {{ filteredStudents.length }}</span>
+      <div class="pagination-controls">
+        <label class="page-size-label">Rows
+          <select name="pageSize" [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            <option [ngValue]="3">3</option>
+            <option [ngValue]="5">5</option>
+            <option [ngValue]="10">10</option>
+          </select>
+        </label>
+        <button class="page-button" type="button" aria-label="Previous page" [disabled]="currentPage === 1" (click)="currentPage = currentPage - 1">‹</button>
+        <span class="page-count">{{ currentPage }} / {{ totalPages }}</span>
+        <button class="page-button" type="button" aria-label="Next page" [disabled]="currentPage === totalPages" (click)="currentPage = currentPage + 1">›</button>
+      </div>
+    </footer>
+  </section>
 </section>

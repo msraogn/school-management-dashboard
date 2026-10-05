@@ -1,16 +1,31 @@
 <section class="page">
   <div class="card">
-    <h2>Login</h2>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+      <span class="brand-name">School Admin</span>
+    </div>
+    <p class="eyebrow">SCHOOL MANAGEMENT PORTAL</p>
+    <h1>Welcome back</h1>
+    <p class="intro">Sign in to manage your school workspace.</p>
     <form (ngSubmit)="onLogin()">
       <label>
         Email
         <input type="email" name="email" [(ngModel)]="email" placeholder="name@school.com" required />
       </label>
       <label>
-        Password
-        <input type="password" name="password" [(ngModel)]="password" placeholder="Enter password" required />
+        <span class="password-label">Password <button class="text-button" type="button" (click)="forgotPassword()">Forgot password?</button></span>
+        <span class="password-field">
+          <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" placeholder="Enter password" required />
+          <button class="visibility-button" type="button" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'" [attr.aria-pressed]="showPassword" (click)="showPassword = !showPassword">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </span>
       </label>
-      <button type="submit">Sign In</button>
+      <button class="submit-button" type="submit">Sign In <span aria-hidden="true">&#8594;</span></button>
     </form>
+    <p class="recovery-message" *ngIf="recoveryMessage" role="status" aria-live="polite">
+      {{ recoveryMessage }} <a href="mailto:support@schooladmin.com?subject=Password%20reset">Contact support</a>.
+    </p>
+    <p class="footer-note">A better day at school starts here.</p>
   </div>
 </section>

@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email = '';
   password = '';
+  showPassword = false;
+  recoveryMessage = '';
 
   constructor(private router: Router) {}
 
@@ -16,5 +18,9 @@ export class LoginComponent {
     if (this.email === 'admin@school.com' && this.password === '123') {
       this.router.navigate(['/home']);
     }
+  }
+
+  forgotPassword(): void {
+    this.recoveryMessage = 'Password reset is not available in this demo.';
   }
 }
